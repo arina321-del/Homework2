@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: homework2-postgres
+    environment:
+      POSTGRES_DB: Homework2
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  user-service:
+    build: .
+    depends_on:
+      - postgres
+    container_name: homework2-user-service
