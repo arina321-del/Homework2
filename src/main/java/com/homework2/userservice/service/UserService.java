@@ -1,42 +1,16 @@
 package com.homework2.userservice.service;
 
-import com.homework2.userservice.dao.UserDao;
 import com.homework2.userservice.dto.UserDto;
-import com.homework2.userservice.mapper.UserMapper;
-import com.homework2.userservice.model.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class UserService {
+public interface UserService {
 
-    private final UserDao userDao;
+    UserDto create(UserDto dto);
 
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    List<UserDto> getAll();
 
-    public void createUser(UserDto dto) {
+    UserDto update(Long id, UserDto dto);
 
-        User user = UserMapper.toEntity(dto);
-
-        userDao.save(user);
-    }
-
-    public List<UserDto> getAllUsers() {
-
-        return userDao.findAll()
-                .stream()
-                .map(UserMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public void deleteUser(Long id) {
-
-        User user = userDao.findById(id);
-
-        if (user != null) {
-            userDao.delete(user);
-        }
-    }
+    void delete(Long id);
 }

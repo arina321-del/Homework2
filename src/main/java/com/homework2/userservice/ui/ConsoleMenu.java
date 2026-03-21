@@ -55,12 +55,12 @@ public class ConsoleMenu {
         dto.setEmail(email);
         dto.setAge(age);
 
-        userService.createUser(dto);
+        userService.create(dto);
     }
 
     private void showUsers() {
 
-        List<UserDto> users = userService.getAllUsers();
+        List<UserDto> users = userService.getAll();
 
         for (UserDto u : users) {
 
@@ -79,6 +79,6 @@ public class ConsoleMenu {
 
         Long id = scanner.nextLong();
 
-        userService.deleteUser(id);
+        userService.delete(id);
     }
 }
