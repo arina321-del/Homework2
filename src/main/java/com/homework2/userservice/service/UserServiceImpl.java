@@ -1,5 +1,7 @@
 package com.homework2.userservice.service;
 
+import com.homework2.userservice.dto.UserEvent;
+import com.homework2.userservice.kafka.UserEventProducer;
 import com.homework2.userservice.repository.UserRepository;
 import com.homework2.userservice.dto.UserDto;
 import com.homework2.userservice.model.User;
@@ -12,15 +14,22 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final UserEventProducer producer;
 
-    public UserServiceImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository,
+                           UserEventProducer producer) {
         this.repository = repository;
+        this.producer = producer;
     }
 
     @Override
     public UserDto create(UserDto dto) {
         User user = toEntity(dto);
-        return toDto(repository.save(user));
+        User saved = repository.save(user);
+
+        producer.sendEvent(new UserEvent("CREATE", saved.getEmail()));
+
+        return toDto(saved);
     }
 
     @Override
@@ -42,7 +51,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
+
+        User user = repository.findById(id).orElseThrow();
+
         repository.deleteById(id);
+
+        producer.sendEvent(new UserEvent("DELETE", user.getEmail()));
     }
 
     private UserDto toDto(User user) {
