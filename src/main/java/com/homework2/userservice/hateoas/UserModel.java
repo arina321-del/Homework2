@@ -1,29 +1,20 @@
-package com.homework2.userservice.model;
+package com.homework2.userservice.hateoas;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import org.springframework.hateoas.RepresentationModel;
 
-@Entity
-@Table(name = "users")
-public class User {
+public class UserModel extends RepresentationModel<UserModel> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
     private String email;
-
     private int age;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    public User() {}
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -48,17 +39,5 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setId(Long id) {
-
     }
 }
